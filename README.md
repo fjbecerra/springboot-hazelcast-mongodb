@@ -1,0 +1,15 @@
+Spring boot, Hazelcast and MongoDB
+==================================
+
+Simple project running on a Jetty 9 embebed. CRUD restful services operations implemented.
+
+Hazelcast configuration:
+- hazelcast.xml file.
+
+Mongodb configuration:
+- application.properties
+
+****************
+Integration Test:
+
+An embebed mongodb de.flapdoodle.embed has been integrated. CRUD test operations have been implemented using spring restTemplate.
