@@ -13,3 +13,8 @@ Mongodb configuration:
 Integration Test:
 
 An embebed mongodb de.flapdoodle.embed has been integrated. CRUD test operations have been implemented using spring restTemplate.
+
+Build and run:
+
+* mvn clean install
+* java -jar target/(jar name).jar
