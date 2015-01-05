@@ -3,6 +3,10 @@ Spring boot, Hazelcast and MongoDB
 
 Simple project running on a Jetty 9 embebed. CRUD restful services operations implemented.
 
+Requeriment:
+
+Mongodb running on default port.
+
 Hazelcast configuration:
 - hazelcast.xml file.
 
