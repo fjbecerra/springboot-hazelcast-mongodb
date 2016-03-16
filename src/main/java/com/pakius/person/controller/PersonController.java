@@ -1,14 +1,8 @@
 package com.pakius.person.controller;
 
-
-
-import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
 
 
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
 import com.pakius.person.config.OperationsMap;
 import com.pakius.person.model.Person;
 
@@ -41,7 +35,7 @@ public class PersonController
         this.operationsMap = operationsMap;
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST , consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST , consumes = "application/json")
     @ResponseBody
     public ResponseEntity<String> createPerson(@RequestBody Person person)
     {
@@ -51,7 +45,7 @@ public class PersonController
        return new ResponseEntity<>(person.id, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/load/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Person> loadPerson(@PathVariable("id") String id)
     {
@@ -62,7 +56,7 @@ public class PersonController
     }
 
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<Void> delete(@PathVariable("id") String id)
     {
@@ -76,17 +70,14 @@ public class PersonController
     }
 
 
-    @RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = "application/json")
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT, consumes = "application/json")
     @ResponseBody
-    public ResponseEntity<Void> updateUser(@RequestBody Person person)
+    public ResponseEntity<Void> updateUser(@PathVariable("id") String id,@RequestBody Person person)
     {
         log.info("update person ", person.toString());
 
-        if (person.id == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-
-        Person found =operationsMap.getMap().get(person.id);
+        Person found =operationsMap.getMap().get(id);
         if(found == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
@@ -96,7 +87,7 @@ public class PersonController
     }
 
 
-    @RequestMapping(value = "/predicate", method = RequestMethod.GET)
+    @RequestMapping(value = "predicate", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Set<Person>> predicate(@RequestParam("query") final String sqlQuery)
     {

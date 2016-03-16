@@ -1,0 +1,5 @@
+com\pakius\person\model\Person.class
+com\pakius\person\controller\PersonController.class
+com\pakius\person\Application.class
+com\pakius\person\config\OperationsMap.class
+com\pakius\person\config\MongoDbConfig.class

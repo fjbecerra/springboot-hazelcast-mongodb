@@ -44,4 +44,13 @@ public class Person implements Serializable{
         result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

@@ -20,12 +20,13 @@ import java.util.*;
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
+//Bad practice, POC purpose
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @WebAppConfiguration
 @IntegrationTest
 public class CRUDTest {
 
-    private static final String HOST = "http://127.0.0.1:8080";
+    private static final String HOST = "http://127.0.0.1:8080/";
 
     RestTemplate restTemplate = new RestTemplate();
     private static String personId;
@@ -33,11 +34,13 @@ public class CRUDTest {
 
     @Test
     public void test1CreatePerson() throws Exception {
+        //Given
         Person person = new Person("Name Surname", "surname@test.com");
+        //When
         HttpEntity<Person> entity = new HttpEntity<>(person);
         ResponseEntity<String> responseEntity = restTemplate.
-                postForEntity(HOST + "/create", entity, String.class);
-
+                postForEntity(HOST , entity, String.class);
+        //Then
         Assert.assertNotNull(responseEntity.getBody());
         personId = responseEntity.getBody();
         Assert.assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
@@ -47,9 +50,10 @@ public class CRUDTest {
     @Test
     public void test2LoadPerson()
     {
-         ResponseEntity<Person> responseEntity = restTemplate.getForEntity(HOST + "/load/" + personId, Person.class);
+        //When
+         ResponseEntity<Person> responseEntity = restTemplate.getForEntity(HOST + personId, Person.class);
+         //Then
          Person actualPerson = responseEntity.getBody();
-
          Assert.assertEquals(personId, actualPerson.id);
          Assert.assertEquals("surname@test.com", actualPerson.email);
          Assert.assertEquals("Name Surname", actualPerson.name);
@@ -59,14 +63,15 @@ public class CRUDTest {
     @Test
     public void test3UpdatePerson()
     {
-        ResponseEntity<Person> responseEntityGet = restTemplate.getForEntity(HOST + "/load/" + personId, Person.class);
+        //Given
+        ResponseEntity<Person> responseEntityGet = restTemplate.getForEntity(HOST + personId, Person.class);
         Person personFound = responseEntityGet.getBody();
         personFound.email = "newEmail@test.com";
-        restTemplate.put(HOST + "/update", personFound);
-
-        responseEntityGet = restTemplate.getForEntity(HOST + "/load/" + personId, Person.class);
+        //When
+        restTemplate.put(HOST + personId, personFound);
+        //Then
+        responseEntityGet = restTemplate.getForEntity(HOST + personId, Person.class);
         personFound = responseEntityGet.getBody();
-
         Assert.assertEquals(personId, personFound.id);
         Assert.assertEquals("newEmail@test.com", personFound.email);
         Assert.assertEquals("Name Surname", personFound.name);
@@ -75,10 +80,12 @@ public class CRUDTest {
     @Test
     public void test4Predicate()
     {
+        //Given
         String query = "email=newEmail@test.com";
+        //When
         ResponseEntity<Set> responseEntity = restTemplate.getForEntity(HOST + "/predicate?query=" + query, Set.class);
+        //Then
         Set set =  responseEntity.getBody();
-
         Iterator<LinkedHashMap<String, String>> it = set.iterator();
         LinkedHashMap linkedHashMap = it.next();
         Assert.assertEquals(personId, linkedHashMap.get("id"));
@@ -89,8 +96,10 @@ public class CRUDTest {
     @Test
     public void test5DeletePerson()
     {
-        restTemplate.delete(HOST + "delete/" + personId);
-        ResponseEntity<Person> responseEntity = restTemplate.getForEntity(HOST + "/load/" + personId, Person.class);
+        //When
+        restTemplate.delete(HOST  + personId);
+        //Then
+        ResponseEntity<Person> responseEntity = restTemplate.getForEntity(HOST + personId, Person.class);
         Assert.assertNull(responseEntity.getBody());
 
     }

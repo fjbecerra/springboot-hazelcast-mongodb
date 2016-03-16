@@ -1,0 +1,3 @@
+com\pakius\CRUDTest.class
+com\pakius\helper\JUnitRunListener.class
+com\pakius\helper\MongoEmbed.class

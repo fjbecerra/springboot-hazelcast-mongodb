@@ -1,0 +1,16 @@
+mongodb:
+  image: mongo:3.0.4
+  ports:
+    - "27017:27017"
+  command: mongod --smallfiles
+   
+
+springboot-hazelcast-mongodb:
+  build: ./    
+  container_name: "springboot-hazelcast-mongodb"
+  ports:
+   - "8080:8080" 
+  links:
+   - mongodb  
+  
+
